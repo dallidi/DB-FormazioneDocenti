@@ -1,4 +1,4 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <script>
   function rowClick(idDocente){
@@ -18,12 +18,12 @@
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
        $classOption["rapporto"] = "selected";
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CODE HERE ----------------------------------------------------->
@@ -33,16 +33,17 @@
             <th>IdDocente</th>
             <th>Sigla</th>
             <th>Nome</th>
-            <th>In [1/2g]</th>
-            <th>Non [1/2g]</th>
+            <th>In [g]</th>
+            <th>Non [g]</th>
           </tr>
         </thead>
         <tbody>
         <?php
-          require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-          $db = connectDB();
-          $sql = "SELECT Docenti.idDocente, Docenti.sigla, Docenti.nome, Docenti.cognome, 
-                         SUM(Frequenze.mgInContingente) AS sumMgIn, SUM(Frequenze.mgNonContingente) AS sumMgNon
+          require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+          $sql = "SELECT Docenti.idDocente, Docenti.sigla, Docenti.nome, 
+                         Docenti.cognome, 
+                         ROUND(SUM(Frequenze.mgInContingente)/2, 1) AS sumMgIn,
+                         ROUND(SUM(Frequenze.mgNonContingente)/2, 1) AS sumMgNon
                   FROM Frequenze
                   INNER JOIN Docenti
                   ON Docenti.idDocente=Frequenze.Docenti_idDocente
@@ -59,7 +60,6 @@
               <td>'.$r["sumMgNon"].'</td>
             </tr>';
           }
-          disconnectDB($db);
         ?>
         </tbody>
       </table>
@@ -68,7 +68,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

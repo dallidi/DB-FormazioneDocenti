@@ -1,9 +1,9 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <?php
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Corso.php';
+  require_once "$__ROOT__/tierData/DataModel/Corso.php";
   if (!checkMinAccess(1)){
-    header('Location: /FormazioneDocenti/TierLogic/login/NoAccess.php');
+    internalRedirectTo("/nav/autenticazione/NoAccess.php");
   }
   
   $idCorso = 0;
@@ -14,32 +14,28 @@
       $idCorso = $_GET["idCorso"];
     }
     if ($idCorso != 0){
-      $db = connectDB();
-      getCorsoById($db, $idCorso, $corso);
-      disconnectDB($db);
+      getCorsoById($idCorso, $corso);
     }
   }elseif($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["action"])){
       if ($_POST["action"] == "aggiorna"){
         if (isset($_POST["idCorso"])){
-          $db = connectDB();
-          getCorsoById($db, $_POST["idCorso"], $corso);
-          saveCorso($db, $corso, $inputErrors, false);
-          disconnectDB($db);
+          getCorsoById($_POST["idCorso"], $corso);
+          saveCorso($corso, $inputErrors, false);
         }else{
-          header("Location: /FormazioneDocenti/corsoRegistrato.php?errorTxt=Id corso non pervenuto!");
+          internalRedirectTo("/corsoRegistrato.php?errorTxt=Id corso non pervenuto!");
         }
       }
       if ($_POST["action"] == "inserisci"){
-        $db = connectDB();
         $corso->CreatoDa = $_SESSION["userInfo"]->Docente->Id;
-        saveCorso($db, $corso, $inputErrors, true);
-        disconnectDB($db);
+        saveCorso($corso, $inputErrors, true);
       }
     }
   }
   
-  function saveCorso($db, &$corso, &$inputErrors, $insert){
+  function saveCorso(&$corso, &$inputErrors, $insert){
+    global $db;
+
     if (isset($_POST["titolo"])){
       $corso->Titolo = $_POST["titolo"];
     }
@@ -76,20 +72,20 @@
               WHERE idCorso=". $corso->Id;
     }
     if ($db->exec($sql) == 1){
-      header("Location: /FormazioneDocenti/corsoRegistrato.php");
+      internalRedirectTo("/corsoRegistrato.php");
     }else{
-      header("Location: /FormazioneDocenti/corsoRegistrato.php?errorTxt=Errore di registrazione!");
+      internalRedirectTo("/corsoRegistrato.php?errorTxt=Errore di registrazione!");
     }
     
   }
 ?>
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CODE HERE ----------------------------------------------------->
@@ -127,7 +123,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

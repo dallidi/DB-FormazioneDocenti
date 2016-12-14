@@ -1,4 +1,4 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <script>
   function rowClick(idCorso){
@@ -17,12 +17,12 @@
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
        $classOption["listaCorsi"] = "selected";
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CODE HERE ----------------------------------------------------->
@@ -39,8 +39,7 @@
         </thead>
         <tbody>
         <?php
-          require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-          $db = connectDB();
+          require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
           $sql = "SELECT * FROM Corsi ORDER BY Titolo";
           $rows = $db->query($sql);
           while ($r = $rows->fetch())
@@ -60,7 +59,6 @@
               <td>'.$r["lastUpdate"].'</td>
             </tr>';
           }
-          disconnectDB($db);
         ?>
         </tbody>
       </table>
@@ -78,7 +76,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

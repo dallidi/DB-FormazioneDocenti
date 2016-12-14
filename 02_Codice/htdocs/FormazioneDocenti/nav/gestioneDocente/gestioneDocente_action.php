@@ -1,12 +1,15 @@
 <?php
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Docente.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierLogic/login/session.php';
-  if (!checkMinAccess(1)){
-    header('Location: /FormazioneDocenti/TierLogic/login/NoAccess.php');
-  }
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php"; 
+  require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+  require_once "$__ROOT__/tierData/DataModel/Docente.php";
+  require_once "$__ROOT__/nav/autenticazione/session.php";
+  // if (!checkMinAccess(1)){
+    // internalRedirectTo("/nav/autenticazione/NoAccess.php");
+  // }
   
-  function updateDocente($db){
+  function updateDocente(){
+    global $db;
+
     $id = $_POST['idDocente'];
     if ($id == 0){
       $sql = "INSERT INTO Docenti (sigla, cognome, nome, cid, viaNo, via, nap,
@@ -45,19 +48,30 @@
 ?>
 
 <?php 
+  require_once $_SERVER["DOCUMENT_ROOT"].
+               '/FormazioneDocenti/helpers/Debug.php';
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    dbgTrace("Computing POST");
     $idDoc = 0;
     if (isset($_POST["action"])){
-      $db = connectDB();
       if ($_POST["action"] == "find"){
-        $idDoc = getDocenteId($db, $_POST["findQuery"]);
+        $idDoc = getDocenteId($_POST["findQuery"]);
       } elseif ($_POST["action"] == "update"){
-        $idDoc = updateDocente($db);
+        dbgTrace("Computing updateDocente");
+        $idDoc = updateDocente();
+        getDocenteById($idDoc, $doc);
+        $_SESSION['userInfo']->Docente = $doc;
       } elseif ($_POST["action"] == "freeze"){
       } elseif ($_POST["action"] == "archive"){
       }
-      disconnectDB($db);
     }
-    header("Location: /FormazioneDocenti/gestioneDocente.php?&ID=".$idDoc );
+    if (isset($_POST["redirect"]))
+    {
+      dbgTrace("Redirecting to ".$_POST["redirect"]);
+      header("Location: ".$_POST["redirect"]);
+    } else {
+      dbgTrace("Redirecting to /nav/gestioneDocente/gestioneDocente.php?ID=$idDoc");
+      internalRedirectTo("/nav/gestioneDocente/gestioneDocente.php?ID=$idDoc");
+    }
   }
 ?>

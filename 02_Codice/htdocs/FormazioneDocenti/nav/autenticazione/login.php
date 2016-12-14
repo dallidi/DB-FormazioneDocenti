@@ -1,14 +1,17 @@
 <?php  
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php"; 
+  require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+
   if (session_status() == PHP_SESSION_NONE) {
     session_start();
-}
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/User.php';
+    connectDB();
+  }
+  require_once "$__ROOT__/tierData/DataModel/User.php";
 
   $errorTxt='Nome utente o password errati!'; 
   if (isset($_POST['submit'])) {
     if (empty($_POST['username']) || empty($_POST['password'])) {
-        header('Location: /FormazioneDocenti/authentication.php?errorTxt='.$errorTxt);
+        internalRedirectTo("/nav/autenticazione/authentication.php?errorTxt=$errorTxt");
     }
     else
     {
@@ -22,7 +25,6 @@
       $username = mysql_real_escape_string($username);
       $password = mysql_real_escape_string($password);
 
-      $db = connectDB();
       $sql = "SELECT * FROM Utenti 
               WHERE nomeUtente='$username' AND pwd='$password'";
       $result = $db->query($sql);
@@ -31,17 +33,16 @@
         $group = new Group();
         $docente = new Docente();
         $usr->UserName = $row['nomeUtente'];
-        getGroupById($db, $row['Gruppi_idGruppo'], $group);
+        getGroupById($row['Gruppi_idGruppo'], $group);
         $usr->Group = $group;
-        getDocenteById($db, $row['Docenti_idDocente'], $docente);
+        getDocenteById($row['Docenti_idDocente'], $docente);
         $usr->Docente = $docente;
         $usr->setLastLogin();
         $_SESSION['userInfo']=$usr; // Initializing Session
-        header("Location: /FormazioneDocenti/home.php"); // Redirecting To Other Page
+        internalRedirectTo("/home.php"); 
       } else {
-        header('Location: /FormazioneDocenti/authentication.php?errorTxt='.$errorTxt);
+        internalRedirectTo("/nav/autenticazione/authentication.php?errorTxt=$errorTxt");
       }
-      disconnectDB($db);
     }
   }
 ?>
