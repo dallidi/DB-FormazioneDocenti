@@ -1,24 +1,24 @@
 <?php
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/User.php';
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php"; 
+  require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+  require_once "$__ROOT__/tierData/DataModel/User.php";
 
   if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    $db = connectDB();
   }
   if(isset($_SESSION['userInfo'])){
     $user_check=$_SESSION['userInfo'];
     $sql = "SELECT nomeUtente
             FROM Utenti 
             WHERE nomeUtente='$user_check->UserName'";
-    $db = connectDB();
     $results = $db->query($sql);
     if (!($row = $results->fetch()))
     {
-      header('Location: /FormazioneDocenti/authentication.php?errorTxt=bla bla'); 
+      internalRedirectTo("/nav/autenticazione/authentication.php?errorTxt=bla bla"); 
     }
-    disconnectDB($db);
   }else{
-      header('Location: /FormazioneDocenti/authentication.php'); 
+      internalRedirectTo("/nav/autenticazione/authentication.php"); 
   }
     
   function checkMinAccess($usrGrp)
@@ -29,6 +29,11 @@
       return $usr->Group->Id <= $usrGrp;
     }
     return false;
+  }
+  
+  function isSelf($id){
+    $usr = $_SESSION['userInfo'];
+    return $usr->Docente->Id == $id;
   }
   
   function sessionIdDocente(){

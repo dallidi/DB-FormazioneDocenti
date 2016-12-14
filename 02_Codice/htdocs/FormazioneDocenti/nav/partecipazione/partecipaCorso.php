@@ -1,21 +1,19 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <?php
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Docente.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Corso.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Frequenza.php';
+  require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+  require_once "$__ROOT__/tierData/DataModel/Docente.php";
+  require_once "$__ROOT__/tierData/DataModel/Corso.php";
+  require_once "$__ROOT__/tierData/DataModel/Frequenza.php";
   
   if (!checkMinAccess(3)){
-    header('Location: /FormazioneDocenti/TierLogic/login/NoAccess.php');
+    internalRedirectTo("/nav/autenticazione/NoAccess.php");
   }
   $idDocente = $_SESSION["userInfo"]->Docente->Id;
   $frequenza = new Frequenza;
   function getData($idCorso, &$corso){
     if ($idCorso != 0){
-      $db = connectDB();
-      getCorsoById($db, $idCorso, $corso);
-      disconnectDB($db);
+      getCorsoById($idCorso, $corso);
     }
   }
   
@@ -27,9 +25,7 @@
     }
   }elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["idFrequenza"])){
-      $db = connectDB();
-      getFrequenzaById($db, $_POST["idFrequenza"], $frequenza);
-      disconnectDB($db);
+      getFrequenzaById($_POST["idFrequenza"], $frequenza);
       $actionValueName = ["updatePartecipazione", "Aggiorna"];
     }else{
       if (isset($_POST["idCorso"])){
@@ -41,13 +37,9 @@
     }
     if (isset($_POST["action"])){
       if ($_POST["action"] == "insertPartecipazione"){
-        $db = connectDB();
-        savePartecipazione($db, $idDocente, $frequenza, $inputErrors, true);
-        disconnectDB($db);
+        savePartecipazione($idDocente, $frequenza, $inputErrors, true);
       }elseif($_POST["action"] == "updatePartecipazione"){
-        $db = connectDB();
-        savePartecipazione($db, $idDocente, $frequenza, $inputErrors, false);
-        disconnectDB($db);
+        savePartecipazione($idDocente, $frequenza, $inputErrors, false);
       }
     }
   }
@@ -92,11 +84,13 @@
     return $result;
   }
   
-  function savePartecipazione($db, $idDocente, $frequenza, &$inputErrors, $insert){
+  function savePartecipazione($idDocente, $frequenza, &$inputErrors, $insert){
+    global $db;
+
     $errText = "";
     if (($idDocente == 0) || ($frequenza->Corso->Id == 0)){ 
       $idCorso = $frequenza->Corso->Id;
-      header("Location: /FormazioneDocenti/partecipazioneRegistrata.php?errorTxt=Id non validi $idDocente $idCorso");
+      internalRedirectTo("/nav/partecipazione/partecipazioneRegistrata.php?errorTxt=Id non validi $idDocente $idCorso");
       return;
     }
     
@@ -118,8 +112,8 @@
         $inputErrors += ["fine" => "invalid"];
       }
     }
-    $inCont = checkPostedNum("mgInContingente", $inputErrors);
-    $nonCont = checkPostedNum("mgNonContingente", $inputErrors);
+    $inCont = checkPostedNum("mgInContingente", $inputErrors)*2;
+    $nonCont = checkPostedNum("mgNonContingente", $inputErrors)*2;
     if ($inCont == 0 && $nonCont == 0){
       $inputErrors += ["mgInContingente" => "invalid", "mgNonContingente" => "invalid"];
     }
@@ -151,20 +145,20 @@
               WHERE idFrequenza=". $frequenza->Id;
     }
     if ($db->exec($sql) == 1){
-      header("Location: /FormazioneDocenti/partecipazioneRegistrata.php");
+      internalRedirectTo("/nav/partecipazione/partecipazioneRegistrata.php");
     }else{
-      header("Location: /FormazioneDocenti/partecipazioneRegistrata.php?errorTxt=Errore di registrazione!");
+      internalRedirectTo("/nav/partecipazione/partecipazioneRegistrata.php?errorTxt=Errore di registrazione!");
     }
   }
 ?>
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CODE HERE ----------------------------------------------------->
@@ -205,14 +199,14 @@
                            value="<?php echo (isset($_POST["idFrequenza"])) ? date_format($frequenza->Fine, "d.m.Y") : getOldValue("fine", "") ?>"></td>
               </tr>
               <tr>
-                <th>In contingente [1/2g]</th><th>Fuori contingente [1/2g]</th>
+                <th>In contingente [g]</th><th>Fuori contingente [g]</th>
               </tr>
               <tr>
                 <td><input class="<?php setIfError("mgInContingente", $inputErrors)?>"
-                           type="number" name="mgInContingente" min="0" 
+                           type="number" name="mgInContingente" min="0" step="0.5"
                            value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Contingente : getOldValue("mgInContingente", "0") ?>" size="2"></td>
                 <td><input class="<?php setIfError("mgNonContingente", $inputErrors)?>" 
-                           type="number" name="mgNonContingente" min="0" 
+                           type="number" name="mgNonContingente" min="0" step="0.5" 
                            value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->NonContingente : getOldValue("mgNonContingente", "0") ?>" size="2"></td>
               </tr>
             </table>
@@ -234,7 +228,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

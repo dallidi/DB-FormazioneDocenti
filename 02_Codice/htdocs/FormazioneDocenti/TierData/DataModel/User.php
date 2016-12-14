@@ -1,5 +1,5 @@
 <?php 
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Docente.php';
+  require_once "$__ROOT__/tierData/DataModel/Docente.php";
   
   class Group {
     public $Id;

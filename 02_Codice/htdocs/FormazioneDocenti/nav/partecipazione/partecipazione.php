@@ -1,4 +1,4 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <script>
   function rowClick(idFrequenza){
@@ -9,12 +9,12 @@
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
        $classOption["partecipazione"] = "selected";
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CODE HERE ----------------------------------------------------->
@@ -24,8 +24,8 @@
             <th>ID</th>
             <th>Inizio</th>
             <th>Fine</th>
-            <th>1/2g in</th>
-            <th>1/2g non</th>
+            <th>g in</th>
+            <th>g non</th>
             <th>Tema</th>
             <th>Sigla</th>
             <th>Titolo</th>
@@ -34,8 +34,7 @@
         </thead>
         <tbody>
         <?php
-          require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-          $db = connectDB();
+          require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
           if (isset($_SESSION["userInfo"])){
             $idDocente = $_SESSION["userInfo"]->Docente->Id;
             $sql = "SELECT Frequenze.idFrequenza, Frequenze.inizio, Frequenze.fine, 
@@ -49,12 +48,14 @@
             $rows = $db->query($sql);
             while ($r = $rows->fetch())
             {
+              $mezzeIn = intval($r["mgInContingente"])/2;
+              $mezzeOut = intval($r["mgNonContingente"])/2;
               echo '<tr onclick="rowClick('.$r["idFrequenza"].')">'; 
                 echo '<td>'.$r["idFrequenza"].'</td>
                 <td>'.convertDateFormat($r["inizio"], "Y-m-d", "d.m.Y").'</td>
                 <td>'.convertDateFormat($r["fine"], "Y-m-d", "d.m.Y").'</td>
-                <td>'.$r["mgInContingente"].'</td>
-                <td>'.$r["mgNonContingente"].'</td>
+                <td>'.$mezzeIn.'</td>
+                <td>'.$mezzeOut.'</td>
                 <td>'.$r["tema"].'</td>
                 <td>'.$r["sigla"].'</td>
                 <td>';
@@ -67,7 +68,6 @@
                 <td>'.convertDateFormat($r["lastUpdate"], "Y-m-d H:i:s", "d.m.Y H:i:s").'</td>
               </tr>';
             }
-            disconnectDB($db);
           }else{
             echo '<tr><td colspan="7">Dati non trovati</td></tr>';
           }
@@ -81,7 +81,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

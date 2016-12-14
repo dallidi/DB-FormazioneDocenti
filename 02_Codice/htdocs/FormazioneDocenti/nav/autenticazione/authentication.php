@@ -1,6 +1,8 @@
 <?php
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php"; 
+  
   if(isset($_SESSION['userInfo'])){
-    header("Location: /FormazioneDocenti/welcome.php");
+    internalRedirectTo("/welcome.php");
   }
   if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $errorTxt = "";
@@ -15,20 +17,20 @@
   <title>Formazione Docenti</title>
   <meta charset="utf-16">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="style\cptbe.css">
+  <link rel="stylesheet" type="text/css" href="<?php echo makeUrl("\style\cptbe.css"); ?>">
   <script>
   </script>
 </head>
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php 
        $classOption["all"] = "disabled";
-       require "navigation.php" ?>
+       require "$__ROOT__/navigation.php" ?>
     <div id="pageHtml" class="col-8">
-      <form action="TierLogic/login/login.php" method="post">
+      <form action="<?php echo makeUrl("/nav/autenticazione/login.php"); ?>" method="post">
         <label>Nome utente :</label>
         <input id="name" name="username" placeholder="username" type="text">
         <label>Password :</label>
@@ -39,7 +41,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>

@@ -1,10 +1,10 @@
-<?php require "head.php" ?>
+<?php require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php" ?>
 
 <?php
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DbInterface/CommonDB.php';
-  require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/TierData/DataModel/Docente.php';
+  require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
+  require_once "$__ROOT__/tierData/DataModel/Docente.php";
   if (!checkMinAccess(1)){
-    header('Location: /FormazioneDocenti/TierLogic/login/NoAccess.php');
+    internalRedirectTo("/nav/autenticazione/NoAccess.php");
   }
 
   $doc = new Docente();
@@ -12,9 +12,7 @@
   if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET["ID"])){
       $id = $_GET["ID"];
-      $db = connectDB();
-      getDocenteById($db, $id, $doc);
-      disconnectDB($db);
+      getDocenteById($id, $doc);
     }
   }
 
@@ -22,12 +20,12 @@
 
 <body>
 <div>
-  <?php require "intestazione.php" ?>
+  <?php require "$__ROOT__/intestazione.php" ?>
   <div class="row centro col-12">
     <?php
        $classOption["all"] = "enable";  // all -> entire list
        $classOption["gestioneDocenti"] = "selected";
-       require "navigation.php" 
+       require "$__ROOT__/navigation.php" 
     ?>
     <div id="pageHtml" class="col-8">
     <!-- ADD YOUR CUSTOM PAGE CODE HERE ----------------------------------------->
@@ -73,7 +71,7 @@
 
         <hr>
         
-        <?php require_once $_SERVER["DOCUMENT_ROOT"].'/FormazioneDocenti/DatiDocente.php' ?>
+        <?php require_once "$__ROOT__/helpers/datiDocente.php" ?>
 
         <hr>
 
@@ -90,7 +88,7 @@
     </div>
   </div>
   <div class="row pie col-12">
-    <?php require "footer.php" ?>
+    <?php require "$__ROOT__/footer.php" ?>
   </div>
 </div>
 </body>
