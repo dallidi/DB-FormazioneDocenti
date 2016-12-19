@@ -26,6 +26,56 @@
 
     $db = null;
   }
+  
+  function addIdInList(&$query, $listIds, $field, &$orderBy=null){
+    if (!$listIds){
+      return;
+    }
+    // $ids = array_filter($listIds, 'is_int');
+    // $idList = implode(',', $ids);
+    $idList = implode(',', $listIds);
+    $str = var_dump($idList);
+    dbgTrace("idlist = $str");
+    if ($idList != ""){
+      $query = "$query $field IN ($idList)";
+      if (!$orderBy){
+        if ($orderBy = ""){
+          $orderBy = "ORDER BY $field";
+        }
+      }
+    }
+  }
+  
+  function addTxtField(&$query, $field, $fieldValue,
+                       &$orderBy = null, $logicOpe = "OR"){
+    if ($fieldValue != ""){
+      if ($query != ""){
+        $query = "$query $logicOpe";
+      }
+      $query = "$query $field LIKE '%$fieldValue%'";
+      if (!$orderBy){
+        if ($orderBy = ""){
+          $orderBy = "ORDER BY $field";
+        }
+      }
+    }
+  }
+
+  function addDateField(&$query, $field, $fieldValue, &$orderBy = null,
+                        $logicOpe = "OR", $compOpe="="){
+    
+    if ($fieldValue != ""){
+      if ($query != ""){
+        $query = "$query $logicOpe";
+      }
+      $query = "$query $field $compOpe '$fieldValue'";
+      if (!$orderBy){
+        if ($orderBy = ""){
+          $orderBy = "ORDER BY $field";
+        }
+      }
+    }
+  }
 
   function insertDocente($docente){
     global $db;
@@ -48,28 +98,11 @@
   
   function getDocenteById($id, &$docente){
     global $db;
-    
-    $sql = "SELECT * FROM `Docenti` 
-            WHERE idDocente = " . $id;
-    $rows = $db->query($sql);
-    if ($r = $rows->fetch()){
-      $docente->Id = $r['idDocente'];
-      $docente->Cid = $r['cid'];
-      $docente->Nome = $r['nome'];
-      $docente->Cognome = $r['cognome'];
-      $docente->Sigla = $r['sigla'];
-      $docente->InizioQ = $r['inizioQuadro'];
-      $docente->FineQ = $r['fineQuadro'];
-      $docente->Indirizzo->Via = $r['via'];
-      $docente->Indirizzo->ViaNo = $r['viaNo'];
-      $docente->Indirizzo->Nap = $r['nap'];
-      $docente->Indirizzo->Localita = $r['localita'];
-      $docente->Contatto->Tel = $r['telefono'];
-      $docente->Contatto->Email = $r['email'];
-      $docente->LastUpdate = $r['lastUpdate'];
-      return $docente->LastUpdate;
-    } else {
-      $id = 0;
+    $idList = array($id);
+    $instances = array();
+    Docente::loadDbData($instances, $idList);
+    if (count($instances) == 1){
+      $docente = $instances[0];
     }
   }
   
@@ -109,6 +142,10 @@
   
   function phpDateToSql($date){
     return date_format($date, "Y-m-d");
+  }
+  
+  function sqlNow(){
+    return date("Y-m-d H:i:s");
   }
  
   function getAmbitoById($idAmbito, &$ambito){

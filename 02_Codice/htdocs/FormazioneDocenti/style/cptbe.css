@@ -78,6 +78,13 @@ table.leftAlign{
   padding: 15px;
   text-align: left;
 }
+table.verticalScroll500 tbody {
+  height: 500px;
+  display: inline-block;
+  width: 100%;
+  overflow: auto;
+  padding-right: 20px;
+}
 
 table.rowSelection tr td:nth-child(1), 
 table.rowSelection th:nth-child(1){

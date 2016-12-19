@@ -7,12 +7,10 @@
     public $Type;
     public $Data;
     
-    public function __construct()
-    {
+    public function __construct(){
     }
     
-    public static function Create($Id, $Name, $Type, $Data)
-    {
+    public static function create($Id, $Name, $Type, $Data){
       $instance = new self();
       $instance->Id = $Id;
       $instance->Name = $Name;
@@ -20,8 +18,7 @@
       $instance->Data = $Data;
       return $instance;
     }
-    public static function LoadDbData(&$config, $name="", $type="")
-    {
+    public static function loadDbData(&$config, $id="0", $name="", $type=""){
       $config
     }
   }
