@@ -60,6 +60,7 @@
         dbgTrace("Computing updateDocente");
         $idDoc = updateDocente();
         getDocenteById($idDoc, $doc);
+        dbgTrace("Docente = $doc");
         $_SESSION['userInfo']->Docente = $doc;
       } elseif ($_POST["action"] == "freeze"){
       } elseif ($_POST["action"] == "archive"){

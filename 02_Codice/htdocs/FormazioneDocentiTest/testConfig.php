@@ -1,6 +1,8 @@
 <?php 
-  require $_SERVER["DOCUMENT_ROOT"]."/FormazioneDocenti/head.php"; 
+  require $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php";
+
   require_once "$__ROOT__/TierData/DataModel/config.php";
+
   function arrayToHtmlTable($anArray)
   {
     echo "<table>

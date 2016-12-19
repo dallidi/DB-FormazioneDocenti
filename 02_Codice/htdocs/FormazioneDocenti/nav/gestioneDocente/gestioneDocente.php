@@ -14,8 +14,22 @@
       $id = $_GET["ID"];
       getDocenteById($id, $doc);
     }
+    $docenti = array();
+    Docente::LoadDbData($docenti);
+  } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = 0;
+    if (isset($_POST["action"])){
+      if ($_POST["action"] == "find"){
+        $query = $_POST["findQuery"];
+        $docenti = array();
+        Docente::LoadDbData($docenti, null, $query, $query, $query, $query,
+                            "Cognome");
+      }
+    }
+    if (isset($_POST["idDocente"])){
+      getDocenteById($id, $doc);
+    }
   }
-
 ?>
 
 <body>
@@ -27,64 +41,14 @@
        $classOption["gestioneDocenti"] = "selected";
        require "$__ROOT__/navigation.php" 
     ?>
-    <div id="pageHtml" class="col-8">
-    <!-- ADD YOUR CUSTOM PAGE CODE HERE ----------------------------------------->
-      <form action="gestioneDocente_action.php"
-            method="post">
-        <table class="leftAlign">
-          <tr>
-            <th class="center" colspan="2">Quadriennio</th>
-          </tr>
-          <tr>
-            <th class="center">Inizio</th><th class="center">Fine</th><th>Settore</th>
-          </tr>
-          <tr>
-            <td>
-              <select  name="inizioQ">
-                <?php
-                  for ($i=2016; $i<=2036; $i++) {
-                    echo '<option value="'.$i.' "';
-                    if ($i == (int)sqlToPhpDate($doc->InizioQ, "Y")){
-                      echo 'selected';
-                    }
-                    echo '>'.$i.'</option>';
-                  }
-                  ?>
-              </select> 
-            </td>
-            <td>
-              <select  name="fineQ">
-                <?php
-                  for ($i=2020; $i<=2040; $i++) {
-                    echo '<option value="'.$i.' "';
-                    if ($i == (int)sqlToPhpDate($doc->FineQ, "Y")){
-                      echo 'selected';
-                    }
-                    echo '>'.$i.'</option>';
-                  }
-                  ?>
-              </select> 
-            </td>
-            <td><input type="text" name="settore" value="<?php echo '' ?>" size="50"></td>
-          </tr>
-        </table>
-
-        <hr>
+    <div id="pageHtml" class="col-10">
+    <!-- ADD YOUR CUSTOM PAGE CODE HERE --------------------------------------->
+    <?php 
+      require "$__ROOT__/nav/gestioneDocente/formDati.php";
+      require "$__ROOT__/nav/gestioneDocente/formTrova.php";
         
-        <?php require_once "$__ROOT__/helpers/datiDocente.php" ?>
-
-        <hr>
-
-        <button type="submit" name="action" value="find">Trova</button>
-        <input type="text" name="findQuery" placeholder="termine di ricerca">
-        <button type="submit" name="action" value="update">Aggiorna</button>
-        <button type="submit" name="action" value="freeze">Blocca</button>
-        <button type="submit" name="action" value="archive">Archivia</button>
-        <input type="hidden" name="idDocente" value="<?php echo $doc->$id ?>">
-        <input type="hidden" name="subPage" value="GestioneDocente.php">
-        
-      </form>
-     <!-- END OF CUSTOM PAGE CODE ------------------------------------------------>
+    ?>
+    <!-- END OF CUSTOM PAGE CODE ---------------------------------------------->
     </div>
   </div>
   <div class="row pie col-12">
