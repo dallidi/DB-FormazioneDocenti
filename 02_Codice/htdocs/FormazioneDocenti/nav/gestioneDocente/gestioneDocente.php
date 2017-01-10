@@ -39,14 +39,14 @@
     <?php
        $classOption["all"] = "enable";  // all -> entire list
        $classOption["gestioneDocenti"] = "selected";
-       require "$__ROOT__/navigation.php" 
+       require "$__ROOT__/navigation.php"
     ?>
     <div id="pageHtml" class="col-10">
     <!-- ADD YOUR CUSTOM PAGE CODE HERE --------------------------------------->
-    <?php 
+    <?php
       require "$__ROOT__/nav/gestioneDocente/formDati.php";
       require "$__ROOT__/nav/gestioneDocente/formTrova.php";
-        
+
     ?>
     <!-- END OF CUSTOM PAGE CODE ---------------------------------------------->
     </div>

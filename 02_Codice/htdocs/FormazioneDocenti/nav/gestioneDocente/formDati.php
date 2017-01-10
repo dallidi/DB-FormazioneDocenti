@@ -1,9 +1,9 @@
-<?php 
+<?php
   // require_once "$__ROOT__/nav/gestioneDocente/formDati.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php";
 ?>
 <div class="col-8">
-  <form 
+  <form
     action="<?php echo makeUrl("/nav/gestioneDocente/gestioneDocente_action.php"); ?>"
     method="post">
     <table class="leftAlign">
@@ -27,7 +27,7 @@
                 echo '>'.$i.'</option>';
               }
               ?>
-          </select> 
+          </select>
         </td>
         <td>
           <select  name="fineQ">
@@ -40,14 +40,14 @@
                 echo '>'.$i.'</option>';
               }
               ?>
-          </select> 
+          </select>
         </td>
         <td><input type="text" name="settore" value="<?php echo '' ?>" size="50"></td>
       </tr>
     </table>
 
     <hr>
-    
+
     <?php require_once "$__ROOT__/helpers/datiDocente.php" ?>
 
     <hr>

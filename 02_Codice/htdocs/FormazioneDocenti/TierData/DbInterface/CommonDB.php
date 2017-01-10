@@ -1,13 +1,13 @@
-<?php 
-  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php"; 
+<?php
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php";
   require_once "$__ROOT__/tierData/DataModel/Docente.php";
-  
+
   $db = null;
   function connectDB(){
     global $db;
 
     $servername = "localhost";
-    $username = "";
+    $username = "root";
     $password = "";
 
     try {
@@ -20,13 +20,13 @@
     }
     return $db;
  }
-  
+
   function disconnectDB(){
     global $db;
 
     $db = null;
   }
-  
+
   function addIdInList(&$query, $listIds, $field, &$orderBy=null){
     if (!$listIds){
       return;
@@ -45,7 +45,7 @@
       }
     }
   }
-  
+
   function addTxtField(&$query, $field, $fieldValue,
                        &$orderBy = null, $logicOpe = "OR"){
     if ($fieldValue != ""){
@@ -63,7 +63,7 @@
 
   function addDateField(&$query, $field, $fieldValue, &$orderBy = null,
                         $logicOpe = "OR", $compOpe="="){
-    
+
     if ($fieldValue != ""){
       if ($query != ""){
         $query = "$query $logicOpe";
@@ -79,23 +79,23 @@
 
   function insertDocente($docente){
     global $db;
-    
+
     $currDate = date("Y-m-d H:i:s");
     $sql = "INSERT INTO `Docenti`
-              (cid, nome, cognome, 
-               sigla, inizioQuadro, fineQadro, 
+              (cid, nome, cognome,
+               sigla, inizioQuadro, fineQadro,
                via, viaNo,
-               nap, localita, 
+               nap, localita,
                telefono, email, lastUpdate)
-            VALUES 
-              ($docente->Cid, $docente->Nome, $docente->Cognome, 
-               $docente->Sigla, $docente->InizioQ, $docente->FineQ, 
-               $docente->Indirizzo->Via, $docente->Indirizzo->ViaNo, 
-               $docente->Indirizzo->Nap, $docente->Indirizzo->Localita, 
+            VALUES
+              ($docente->Cid, $docente->Nome, $docente->Cognome,
+               $docente->Sigla, $docente->InizioQ, $docente->FineQ,
+               $docente->Indirizzo->Via, $docente->Indirizzo->ViaNo,
+               $docente->Indirizzo->Nap, $docente->Indirizzo->Localita,
                $docente->Contatto->Tel, $docente->Contatto->Email, $currDate)";
     $rows = $db->exec($sql);
   }
-  
+
   function getDocenteById($id, &$docente){
     global $db;
     $idList = array($id);
@@ -105,15 +105,15 @@
       $docente = $instances[0];
     }
   }
-  
+
   function getDocenteId($query){
     global $db;
-    
+
     $query = '%' . $query . '%';
-    $sql = "SELECT idDocente FROM `Docenti` 
-            WHERE sigla LIKE '" . $query . "' OR 
-                  cognome LIKE '" . $query . "' OR 
-                  nome LIKE '" . $query . "' OR 
+    $sql = "SELECT idDocente FROM `Docenti`
+            WHERE sigla LIKE '" . $query . "' OR
+                  cognome LIKE '" . $query . "' OR
+                  nome LIKE '" . $query . "' OR
                   cid LIKE '" . $query ."'";
     $rows = $db->query($sql);
     if ($r = $rows->fetch()){
@@ -126,7 +126,7 @@
   function getGroupById($idGruppo, &$group){
     global $db;
 
-    $sql = "SELECT * 
+    $sql = "SELECT *
             FROM Gruppi
             WHERE IdGruppo=$idGruppo";
     $rows = $db->query($sql);
@@ -135,23 +135,23 @@
       $group->Descrizione = $r["descrizione"];
     }
   }
-  
+
   function sqlToPhpDate($sqlDate, $format){
     return date($format, strtotime($sqlDate));
   }
-  
+
   function phpDateToSql($date){
     return date_format($date, "Y-m-d");
   }
-  
+
   function sqlNow(){
     return date("Y-m-d H:i:s");
   }
- 
+
   function getAmbitoById($idAmbito, &$ambito){
    global $db;
-   
-   $sql = "SELECT * 
+
+   $sql = "SELECT *
             FROM Ambiti
             WHERE idAmbito=$idAmbito";
     $rows = $db->query($sql);
@@ -163,7 +163,7 @@
   function getOrganizzatoreById($idOrganizzatore, &$organizzatore){
     global $db;
 
-    $sql = "SELECT * 
+    $sql = "SELECT *
             FROM Organizzatori
             WHERE idOrganizzatore=$idOrganizzatore";
     $rows = $db->query($sql);
@@ -175,7 +175,7 @@
   function getCorsoById($idCorso, &$corso){
     global $db;
 
-    $sql = "SELECT * 
+    $sql = "SELECT *
             FROM Corsi
             WHERE IdCorso=$idCorso";
     $rows = $db->query($sql);
@@ -190,11 +190,11 @@
       getOrganizzatoreById($r["Organizzatori_idOrganizzatore"], $corso->Organizzatore);
     }
   }
-  
+
   function getFrequenzaById($idFrequenza, &$frequenza){
     global $db;
 
-    $sql = "SELECT * 
+    $sql = "SELECT *
             FROM Frequenze
             WHERE idFrequenza=$idFrequenza";
     $rows = $db->query($sql);
@@ -211,7 +211,7 @@
       $frequenza->Rapporto = $r["rapporto"];
     }
   }
-  
+
   function convertDateFormat($dateStr, $fromFormat, $toFormat){
     return date_format(date_create_from_format($fromFormat, $dateStr), $toFormat);
   }
