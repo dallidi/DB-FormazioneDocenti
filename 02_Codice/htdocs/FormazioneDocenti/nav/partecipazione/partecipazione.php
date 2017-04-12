@@ -37,10 +37,18 @@
           require_once "$__ROOT__/tierData/DbInterface/CommonDB.php";
           if (isset($_SESSION["userInfo"])){
             $idDocente = $_SESSION["userInfo"]->Docente->Id;
+            // $sql = "SELECT Frequenze.idFrequenza, Frequenze.inizio, Frequenze.fine, 
+                           // Frequenze.mgInContingente, Frequenze.mgNonContingente, 
+                           // Frequenze.lastUpdate, Frequenze.Docenti_idDocente,
+                           // Corsi.sigla, Corsi.titolo, Corsi.tema, Corsi.ptrDescrizione
+                    // FROM Frequenze
+                    // INNER JOIN Corsi
+                    // ON Frequenze.Corsi_idCorso=Corsi.idCorso
+                    // WHERE Frequenze.Docenti_idDocente=$idDocente";
             $sql = "SELECT Frequenze.idFrequenza, Frequenze.inizio, Frequenze.fine, 
                            Frequenze.mgInContingente, Frequenze.mgNonContingente, 
                            Frequenze.lastUpdate, Frequenze.Docenti_idDocente,
-                           Corsi.sigla, Corsi.titolo, Corsi.tema, Corsi.ptrDescrizione
+                           Corsi.sigla, Corsi.titolo, Corsi.tema
                     FROM Frequenze
                     INNER JOIN Corsi
                     ON Frequenze.Corsi_idCorso=Corsi.idCorso
@@ -59,11 +67,11 @@
                 <td>'.$r["tema"].'</td>
                 <td>'.$r["sigla"].'</td>
                 <td>';
-                if (empty($r["ptrDescrizione"])){
-                  echo $r["titolo"];
-                }else{
-                  echo '<a href="'.$r["ptrDescrizione"],'" target="_blank">'.$r["titolo"].'</a>';
-                }
+                // if (empty($r["ptrDescrizione"])){
+                  // echo $r["titolo"];
+                // }else{
+                  // echo '<a href="'.$r["ptrDescrizione"],'" target="_blank">'.$r["titolo"].'</a>';
+                // }
                 echo '</td>
                 <td>'.convertDateFormat($r["lastUpdate"], "Y-m-d H:i:s", "d.m.Y H:i:s").'</td>
               </tr>';

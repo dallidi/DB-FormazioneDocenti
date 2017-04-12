@@ -1,6 +1,6 @@
 <?php
   // require $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/head.php"; 
-  require $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/FormazioneDocenti/baseUrl.php";
   require_once "$__ROOT__/nav/autenticazione/session.php";
 ?>
 <!DOCTYPE html>

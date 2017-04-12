@@ -13,7 +13,7 @@
   $frequenza = new Frequenza;
   function getData($idCorso, &$corso){
     if ($idCorso != 0){
-      getCorsoById($idCorso, $corso);
+      Corso::getById($idCorso, $corso);
     }
   }
   
@@ -25,7 +25,7 @@
     }
   }elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["idFrequenza"])){
-      getFrequenzaById($_POST["idFrequenza"], $frequenza);
+      Frequenza::getById($_POST["idFrequenza"], $frequenza);
       $actionValueName = ["updatePartecipazione", "Aggiorna"];
     }else{
       if (isset($_POST["idCorso"])){
@@ -171,11 +171,15 @@
                 <th>Sigla</th>
                 <th>Tema</th>
                 <th>Titolo</th>
+                <th>Documenti</th>
               </tr>
               <tr>
                 <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Sigla : $frequenza->Corso->Sigla ?></td>
                 <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Tema : $frequenza->Corso->Tema ?></td>
                 <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Titolo : $frequenza->Corso->Titolo ?> </td>
+                <td rowspan="4">
+                  <?php $dbFiles = $frequenza->Corso->Doc; require_once "$__ROOT__\helpers\listaFiles.php"?></tr>
+                </td>
               </tr>
               <tr>
                 <th colspan="3">Descrizione</th>

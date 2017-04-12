@@ -52,11 +52,9 @@
 
     <hr>
 
-    <button type="submit" name="action" value="find">Trova</button>
-    <input type="text" name="findQuery" placeholder="termine di ricerca">
     <button type="submit" name="action" value="update">Aggiorna</button>
-    <button type="submit" name="action" value="freeze">Blocca</button>
-    <button type="submit" name="action" value="archive">Archivia</button>
+    <!-- button type="submit" name="action" value="freeze">Blocca</button>
+    <button type="submit" name="action" value="archive">Archivia</button -->
     <input type="hidden" name="idDocente" value="<?php echo $doc->Id ?>">
   </form>
 </div>

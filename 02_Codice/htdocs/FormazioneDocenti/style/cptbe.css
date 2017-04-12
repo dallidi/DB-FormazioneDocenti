@@ -78,7 +78,7 @@ table.leftAlign{
   padding: 15px;
   text-align: left;
 }
-table.verticalScroll500 tbody {
+table.verticalScroll500 {
   height: 500px;
   display: inline-block;
   width: 100%;
@@ -107,6 +107,18 @@ table.rowSelection tbody tr:nth-child(odd):hover td,
 table.rowSelection tr:nth-child(even):hover td
 {
   background-color: Blue;
+}
+
+.searchField {
+  background-image: url('searchicon.png');
+  /* background-position: 10px 10px; */
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding-left: 25px;
+  /* padding: 12px 20px 12px 40px; */
+  /* border: 1px solid #ddd; */
+  /* margin-bottom: 12px; */
 }
 
 p.updateInfo{
