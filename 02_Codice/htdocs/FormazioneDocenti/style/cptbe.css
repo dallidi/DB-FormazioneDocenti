@@ -78,6 +78,19 @@ table.leftAlign{
   padding: 15px;
   text-align: left;
 }
+table #dbFiles.leftAlign{
+  padding-left: 0px;
+  padding-top: 0px;
+}
+
+table #dbFiles thead.hidden{
+  display: none;
+}
+table #dbFiles.hidden{
+  display: none;
+}
+
+
 table.verticalScroll500 {
   height: 500px;
   display: inline-block;

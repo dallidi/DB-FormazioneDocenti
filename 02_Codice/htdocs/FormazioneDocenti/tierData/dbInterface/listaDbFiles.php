@@ -36,8 +36,9 @@
  </script>
 
 <div class="col-12">
-  <table id="dbFiles" class="rowSelection leftAlign verticalScroll500">
-  <thead>
+  <table id="dbFiles" class="rowSelection leftAlign verticalScroll500_ 
+                          <?php if(count($dbFiles) == 0) { echo "hidden";} ?>">
+  <thead class="<?php if(count($dbFiles) < 10) { echo "hidden";} ?>">
     <tr>
       <td>Hidden col</td>
       <td colspan="3">

@@ -6,6 +6,8 @@
   $resultUrl = makeUrl("/helpers/fileUpload/fileUpload.php");
   $hidden = "hidden";
   $result = "";
+  $prefix = "Test";
+  $idCorso = "T";
   if (isset($_GET["result"])){
     $result = $_GET["result"];
     $hidden = "";
@@ -17,6 +19,8 @@
     <input type="file" name="uploadFile" size="25" value="carica"/>
     <input type="submit" name="submit" value="Submit" />
     <input type="hidden" name="resultUrl" value="<?php echo $resultUrl; ?>"/>
+    <input type="hidden" name="prefix" value="<?php echo $prefix; ?>"/>
+    <input type="hidden" name="idCorso" value="<?php echo $idCorso; ?>"/>
   </form>
   <?php echo "<p $hidden>$result</p>"; ?>
 </div>

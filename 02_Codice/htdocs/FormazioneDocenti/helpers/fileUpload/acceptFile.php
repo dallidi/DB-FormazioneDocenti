@@ -32,7 +32,7 @@
   
   function makeUploadFilename($prefix, $idCorso, $origName){
     $ext = pathinfo($origName, PATHINFO_EXTENSION);
-    $filename = $prefix.'_'.$idCorso.'_'.date("Ymd").'.'.$ext;
+    $filename = "$prefix"."_".$idCorso."_".date("Ymd").".$ext";
     return $filename;
   }
   
@@ -50,7 +50,15 @@
   try{
     checkFileValidity();
     $origName = $_FILES['uploadFile']['name'];
-    $newFileName = makeUploadFilename('Test', 1, $origName); 
+    $prefix = "cust";
+    $idCorso = "0";
+    if (isset($_POST["prefix"])){
+      $prefix = $_POST["prefix"];
+    }
+    if (isset($_POST["idCorso"])){
+      $idCorso = $_POST["idCorso"];
+    }
+    $newFileName = makeUploadFilename($prefix, $idCorso, $origName); 
     $newFilePath = makeUploadFilePath();
     if (move_uploaded_file($_FILES['uploadFile']['tmp_name'], $newFilePath.$newFileName)){
       dbgTrace($_FILES['uploadFile']['name'] . " ricevuto e rinominato " . $newFileName);

@@ -11,6 +11,14 @@
     public $Documenti;
     public $Rapporto;
     
+    const RICHIESTA       = "RICHIESTA";
+    const APPROVAZIONE    = "APPROVAZIONE";
+    const ISCRIZIONE      = "ISCRIZIONE";
+    const CONFERMA        = "CONFERMA";
+    const CERTIFICATO     = "CERTIFICATO";
+    const GIUSTIFICAZIONE = "GIUSTIFICAZIONE";
+    const RAPPORTO        = "RAPPORTO";
+    
     public function frequenzaNil(){
       $this->Id = 0;
       // TO DEL $this->Docente->docenteNil();
@@ -43,17 +51,39 @@
       $instance->Fine = $Fine;
       $instance->Contingente = $Contingente;
       $instance->NonContingente = $NonContingente;
-      $instance->PtrAttestato = $PtrAttestato;
-      $instance->PtrRapporto = $PtrRapporto;
+      $instance->Documenti = $PtrAttestato;
       $instance->Rapporto = $Rapporto;
       return $instance;
     }
     
-    public static function addDoc($doc)
-    {
+    public static function updateDoc($cat, $doc){
       
     }
 
+    public function setRichiesta($doc){
+      updateDoc(RICHIESTA, $doc);
+    }
+
+    public function setApprovazione(){
+      updateDoc(APPROVAZIONE, $doc);
+    }
+    
+    public function setIscrizione(){
+      updateDoc(ISCRIZIONE, $doc);
+    }
+    
+    public function setConferma(){
+      updateDoc(CONFERMA, $doc);
+    }
+    
+    public function setCertificato(){
+      updateDoc(CERTIFICATO, $doc);
+    }
+    
+    public function setGiustificazione(){
+      updateDoc(GIUSTIFICAZIONE, $doc);
+    }
+    
     public static function getById($idFrequenza, &$frequenza){
       global $db;
 
@@ -74,6 +104,7 @@
         $frequenza->Rapporto = $r["rapporto"];
       }
     }
+    
 
   }
     
