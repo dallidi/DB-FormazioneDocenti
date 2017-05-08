@@ -3,12 +3,11 @@
                // '/FormazioneDocenti/helpers/Debug.php';
   
   define("cDbgError", "ERROR");
-  define("cDbgExcept", "EXCEPT");
   define("cDbgToDo", "TODO");
   define("cDbgInfo", "INFO");  
   
   function writeUserError($message){
-    error_log("USR;'".$$message);
+    error_log("USR;'".$message);
   }
   
   // $level might be one of the following: INFO, ERROR
@@ -19,13 +18,6 @@
     error_log("DBG;$level;$file;$line;$message");
   }
   
-  function dbgExport($var, $level = cDbgInfo){
-    $trace = debug_backtrace()[0];
-    $file = $trace["file"];
-    $line = $trace["line"];
-    error_log("DBG;$level;$file;$line;".var_export($var, true));
-  }
-
   function htmlTrace($message){
     $trace = debug_backtrace()[0];
     $file = $trace["file"];

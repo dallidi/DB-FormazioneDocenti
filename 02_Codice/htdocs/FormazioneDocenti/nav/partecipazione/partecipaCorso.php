@@ -13,7 +13,7 @@
   $frequenza = new Frequenza;
   function getData($idCorso, &$corso){
     if ($idCorso != 0){
-      getCorsoById($idCorso, $corso);
+      Corso::getById($idCorso, $corso);
     }
   }
   
@@ -25,7 +25,7 @@
     }
   }elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["idFrequenza"])){
-      getFrequenzaById($_POST["idFrequenza"], $frequenza);
+      Frequenza::getById($_POST["idFrequenza"], $frequenza);
       $actionValueName = ["updatePartecipazione", "Aggiorna"];
     }else{
       if (isset($_POST["idCorso"])){
@@ -166,52 +166,76 @@
         <div class="row centro col-12">
           <form action="partecipaCorso.php"
                 method="post">
-             <table class="leftAlign" style="padding-bottom: 0">
-              <tr>
-                <th>Sigla</th>
-                <th>Tema</th>
-                <th>Titolo</th>
-              </tr>
-              <tr>
-                <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Sigla : $frequenza->Corso->Sigla ?></td>
-                <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Tema : $frequenza->Corso->Tema ?></td>
-                <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Titolo : $frequenza->Corso->Titolo ?> </td>
-              </tr>
-              <tr>
-                <th colspan="3">Descrizione</th>
-              </tr>
-              <tr>
-                <td colspan="3"><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Descrizione : $frequenza->Corso->Descrizione ?></td>
-              </tr>
-            </table>
-            <hr>
-
-             <table class="leftAlign" style="padding-bottom: 0">
-              <tr>
-                <th>Inizio</th><th>Fine</th>
-              </tr>
-              <tr>
-                <td><input class="<?php echo setIfError("inizio", $inputErrors)?>" 
-                           type="text" name="inizio" placeholder="gg.mm.aaaa"
-                           value="<?php echo (isset($_POST["idFrequenza"])) ? date_format($frequenza->Inizio, "d.m.Y") : getOldValue("inizio", "") ?>"></td>
-                <td><input class="<?php echo setIfError("fine", $inputErrors)?>" 
-                           type="text" name="fine" placeholder="gg.mm.aaaa"
-                           value="<?php echo (isset($_POST["idFrequenza"])) ? date_format($frequenza->Fine, "d.m.Y") : getOldValue("fine", "") ?>"></td>
-              </tr>
-              <tr>
-                <th>In contingente [g]</th><th>Fuori contingente [g]</th>
-              </tr>
-              <tr>
-                <td><input class="<?php setIfError("mgInContingente", $inputErrors)?>"
-                           type="number" name="mgInContingente" min="0" step="0.5"
-                           value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Contingente : getOldValue("mgInContingente", "0") ?>" size="2"></td>
-                <td><input class="<?php setIfError("mgNonContingente", $inputErrors)?>" 
-                           type="number" name="mgNonContingente" min="0" step="0.5" 
-                           value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->NonContingente : getOldValue("mgNonContingente", "0") ?>" size="2"></td>
-              </tr>
-            </table>
-
-            <hr>
+            <div class="row centro col-12" style="border-bottom: 1px solid">
+              <div class="col-6">
+                <table class="leftAlign" style="padding-bottom: 0">
+                  <tr>
+                    <th>Sigla</th>
+                    <th>Tema</th>
+                    <th>Titolo</th>
+                  </tr>
+                  <tr>
+                    <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Sigla : $frequenza->Corso->Sigla ?></td>
+                    <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Tema : $frequenza->Corso->Tema ?></td>
+                    <td><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Titolo : $frequenza->Corso->Titolo ?> </td>
+                  </tr>
+                  <tr>
+                    <th colspan="3">Descrizione</th>
+                  </tr>
+                  <tr>
+                    <td colspan="3"><?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Corso->Descrizione : $frequenza->Corso->Descrizione ?></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-6">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Documenti</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <?php $dbFiles = $frequenza->Corso->Doc; require "$__ROOT__/tierData/dbInterface/listaDbFiles.php"?>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row centro col-12" style="border-bottom: 1px solid">
+              <div class="col-6">
+                <table class="leftAlign" style="padding-bottom: 0; width: 50%; float: left">
+                  <tr>
+                    <th>Inizio</th>
+                    <th>Fine</th>
+                  </tr>
+                  <tr>
+                    <td><input class="<?php echo setIfError("inizio", $inputErrors)?>" 
+                               type="text" name="inizio" placeholder="gg.mm.aaaa"
+                               value="<?php echo (isset($_POST["idFrequenza"])) ? date_format($frequenza->Inizio, "d.m.Y") : getOldValue("inizio", "") ?>"></td>
+                    <td><input class="<?php echo setIfError("fine", $inputErrors)?>" 
+                               type="text" name="fine" placeholder="gg.mm.aaaa"
+                               value="<?php echo (isset($_POST["idFrequenza"])) ? date_format($frequenza->Fine, "d.m.Y") : getOldValue("fine", "") ?>"></td>
+                  </tr>
+                  <tr>
+                    <th>In contingente [g]</th><th>Fuori contingente [g]</th>
+                  </tr>
+                  <tr>
+                    <td><input class="<?php setIfError("mgInContingente", $inputErrors)?>"
+                               type="number" name="mgInContingente" min="0" step="0.5"
+                               value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->Contingente : getOldValue("mgInContingente", "0") ?>" size="2"></td>
+                    <td><input class="<?php setIfError("mgNonContingente", $inputErrors)?>" 
+                               type="number" name="mgNonContingente" min="0" step="0.5" 
+                               value="<?php echo (isset($_POST["idFrequenza"])) ? $frequenza->NonContingente : getOldValue("mgNonContingente", "0") ?>" size="2"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-6">
+                <?php require "$__ROOT__/nav/partecipazione/tabellaDocumenti.php" ?>
+              </div>
+            </div>
 
             <button type="submit" name="action" value="<?php echo $actionValueName[0] ?>"><?php echo $actionValueName[1] ?></button>
             <input type="hidden" name="idDocente" value="<?php echo $idDocente ?>">

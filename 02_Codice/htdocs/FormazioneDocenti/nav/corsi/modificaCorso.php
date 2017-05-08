@@ -14,13 +14,13 @@
       $idCorso = $_GET["idCorso"];
     }
     if ($idCorso != 0){
-      getCorsoById($idCorso, $corso);
+      Corso::getById($idCorso, $corso);
     }
   }elseif($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["action"])){
       if ($_POST["action"] == "aggiorna"){
         if (isset($_POST["idCorso"])){
-          getCorsoById($_POST["idCorso"], $corso);
+          Corso::getById($_POST["idCorso"], $corso);
           saveCorso($corso, $inputErrors, false);
         }else{
           internalRedirectTo("/corsoRegistrato.php?errorTxt=Id corso non pervenuto!");
